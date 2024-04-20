@@ -40,7 +40,6 @@ const signin = async (req, res) => {
             if (!passwordMatch)
                 return res.json("invalid password");    
                 
-            
         } else {
             return res.json("no such records");
         }
@@ -54,27 +53,30 @@ const signin = async (req, res) => {
     
 };
 
-const resetPassword = async(req,res)=>{
+const resetpassword = async(req,res)=>{
+    console.log("got")
     const {email}=req.body;
     try{
+        console.log("2")
         const user = await authmodel.find({email:email});
             if(!user)
                 return res.json("user not registered")    
-
+            
+            console.log("3")
             const token = jwt.sign({id:user._id},process.env.KEY,{expiresIn:'5m'})
             var transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                  user: 'sivanantham1605@gmail.com',
-                  pass: '1605'
+                  user: 'sivanantham1225@gmail.com',
+                  pass: "hgch rdeq lnly vwml"
                 }
               });
               
               var mailOptions = {
-                from: 'sivanantham1605@gmail.com',
+                from: 'sivanantham1225@gmail.com',
                 to: email,
                 subject: 'Reset your  password',
-                text: `http://localhost:5173/resetPassword/${token}`
+                text: `http://localhost:5173/newPassword/${token}`
               };
               
               transporter.sendMail(mailOptions, function(error, info){
@@ -82,6 +84,7 @@ const resetPassword = async(req,res)=>{
                   console.log(error);
                   res.json("can't send email")
                 } else {
+                   res.json("sent") 
                   console.log('Email sent: ' + info.response);
                 }
               });
@@ -90,9 +93,26 @@ const resetPassword = async(req,res)=>{
     }
 }
 
+const newPassword = async(req,res)=>{
+    const token=req.params.token;
+    const password =req.body;
+    try{
+        const decoded = jwt.verify(token,process.env.KEY)
+        const id=decoded.id;
+        const hashPassword =await bcrypt.hash(password,10)
+        await authmodel.findByIdAndUpdate({_id:id},{password:hashPassword})
+        return res.json("updated");
+    }catch(err){
+        console.error(err);
+        return res.json("invalid token")
+    }
+
+}
+
 
 module.exports={
     signup,
     signin,
-    resetPassword
+    resetpassword,
+    newPassword
 }

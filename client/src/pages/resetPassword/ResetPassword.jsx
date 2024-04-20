@@ -12,13 +12,13 @@ const ResetPassword = () => {
     const handleSubmit = (e)=>{
         
         e.preventDefault()
-        axios.post("http://localhost:4000/auth/forgotPassword",{
+        axios.post("http://localhost:4000/auth/resetPassword",{
             email
         }).then(res=>{
-          if(res)
+          if(res.data==="sent")
           {
             alert("Check your email for reset password link");
-            navigate("/singin");
+            navigate("/signin");
           }
           else
             setErrorMsg(res.data)
@@ -29,9 +29,9 @@ const ResetPassword = () => {
     }
 
   return (
-    <div className='Signin'>
+    <div className='resetPassword'>
       
-      <form className='Signin-form' onSubmit={handleSubmit}>
+      <form className='resetPassword-form' onSubmit={handleSubmit}>
       
         <center><h2>Reset Password</h2></center><br />
         

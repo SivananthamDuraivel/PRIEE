@@ -10,6 +10,7 @@ import Signup from './pages/signup/Signup';
 import Signin from './pages/signin/Signin';
 import Home from './pages/home/Home';
 import ResetPassword from './pages/resetPassword/ResetPassword';
+import NewPassword from './pages/resetPassword/NewPassword';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path='/signup' element={<Signup/>}></Route>
         <Route path='/signin' element={<Signin/>}></Route>
         <Route path='/resetPassword' element={<ResetPassword/>}></Route>
+        <Route path='/newPassword/:token' element={<NewPassword/>}></Route>
         <Route path='/nutrition' element={<Nutrition/>}> </Route>
         <Route path='/dietplanner' element={<DietPlanner/>}> </Route>
         <Route path='/model' element={<CalorieTracker/>}></Route>

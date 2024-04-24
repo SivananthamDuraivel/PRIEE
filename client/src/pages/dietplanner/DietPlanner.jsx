@@ -15,6 +15,7 @@ const DietPlanner = () => {
   useEffect(() => {
     const getPlans = async () => {
       try {
+        axios.defaults.withCredentials=true;
         const response = await axios.get("http://localhost:4000/api/dietPlan");
         if(response)  setDietPlan(response.data);
       } catch (error) {

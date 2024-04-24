@@ -46,7 +46,7 @@ const DietPlanAdder = () => {
             alert("All fields must be filled out.");
             return;
         }
-    
+        axios.defaults.withCredentials=true;
         axios.post('http://localhost:4000/api/dietPlan', {
             mbreakfast, mlunch, mdinner, msnacks,
             tbreakfast, tlunch, tdinner, tsnacks,

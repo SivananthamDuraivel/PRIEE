@@ -6,7 +6,7 @@ import axios from 'axios';
 const NewPassword = () => {
     const navigate=useNavigate();
     const {token}=useParams();
-    // console.log(token)
+    console.log(token)
 
     const [errorMsg,setErrorMsg]=useState('');
     const [password,setPassword]=useState('');

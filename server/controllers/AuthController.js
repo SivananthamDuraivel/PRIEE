@@ -4,6 +4,13 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer=require('nodemailer')
 
+const express = require('express');
+const cookieParser = require('cookie-parser');
+
+
+const app = express();
+app.use(cookieParser());
+
 
 const signup = async (req, res) => {
     const { username, email, password } = req.body;
@@ -35,6 +42,7 @@ const signin = async (req, res) => {
     console.log("got signin req")
     try {
         const user = await authmodel.findOne({ email: email });
+        
         if (user) {
             const passwordMatch = await bcrypt.compare(password, user.password);
             if (!passwordMatch)
@@ -54,15 +62,14 @@ const signin = async (req, res) => {
 };
 
 const resetpassword = async(req,res)=>{
-    console.log("got")
+    
     const {email}=req.body;
     try{
-        console.log("2")
-        const user = await authmodel.find({email:email});
+        
+        const user = await authmodel.findOne({email:email});
             if(!user)
                 return res.json("user not registered")    
             
-            console.log("3")
             const token = jwt.sign({id:user._id},process.env.KEY,{expiresIn:'5m'})
             var transporter = nodemailer.createTransport({
                 service: 'gmail',
@@ -95,7 +102,7 @@ const resetpassword = async(req,res)=>{
 
 const newPassword = async(req,res)=>{
     const token=req.params.token;
-    const password =req.body;
+    const {password} =req.body;
     try{
         const decoded = jwt.verify(token,process.env.KEY)
         const id=decoded.id;
@@ -109,10 +116,20 @@ const newPassword = async(req,res)=>{
 
 }
 
+const verify = async(req,res)=>{
+    res.json("verified")
+};
+
+const logout = async(req,res)=>{
+    res.clearCookie('token')
+    res.send("logged out");
+}
 
 module.exports={
     signup,
     signin,
     resetpassword,
-    newPassword
+    newPassword,
+    verify,
+    logout
 }

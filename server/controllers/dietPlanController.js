@@ -1,9 +1,18 @@
 const dietplan=require('../models/dietPlanModel')
 const mongoose=require('mongoose')
 
+
+var express = require('express');
+var cookieParser = require('cookie-parser');
+var app = express();
+app.use(cookieParser());
+// app.get('/', function(req, res) {
+//    console.log(req.cookies[token]);
+// })
+
 //get all
 const getAllPlan=async (req,res)=>{
-    const table=await dietplan.find({}).sort({ updatedAt: -1 })
+    const table=await dietplan.find({username:req.username}).sort({ updatedAt: -1 })
     res.status(200).json(table)
 }
 //get one
@@ -53,6 +62,7 @@ const createPlan = async (req,res)=>{
     }=req.body;
     try{
         const dp= await dietplan.create({
+        username:req.username,
         mbreakfast,
         mlunch,
         mdinner,

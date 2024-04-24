@@ -1,6 +1,4 @@
-import { useState } from 'react'
-import axios from 'axios';
-import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Nutrition from './pages/nutritionFolder/Nutrition';
 import DietPlanner from './pages/dietplanner/DietPlanner';
 import Navbar from './components/navbar/Navbar';
@@ -12,12 +10,21 @@ import Home from './pages/home/Home';
 import ResetPassword from './pages/resetPassword/ResetPassword';
 import NewPassword from './pages/resetPassword/NewPassword';
 
-
 function App() {
-
   return (
     <BrowserRouter>
-      <Navbar/>
+      <AppContent />
+    </BrowserRouter>
+  );
+}
+
+function AppContent() {
+  const location = useLocation();
+  const isHomeRoute = location.pathname === '/';
+  
+  return (
+    <>
+      {!isHomeRoute && <Navbar />}
       <Routes>
         <Route path='/' element={<Home/>}></Route>
         <Route path='/landing' element={<Landing/>}></Route>
@@ -29,9 +36,8 @@ function App() {
         <Route path='/dietplanner' element={<DietPlanner/>}> </Route>
         <Route path='/model' element={<CalorieTracker/>}></Route>
       </Routes>
-    </BrowserRouter>
-  
-  )
+    </>
+  );
 }
 
-export default App
+export default App;
